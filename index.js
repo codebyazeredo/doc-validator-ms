@@ -40,7 +40,7 @@ app.post('/validate', (req, res) => {
     }
   } else if (normalized.length === 14) {
     if (validarCNPJ(normalized)) {
-      result = { valid: true, type: 'cnpj', formatted: formatarCnpj(normalized) };
+      result = { valid: true, type: 'cnpj', formatted: formatarCNPJ(normalized) };
     }
   }
 
@@ -67,8 +67,8 @@ app.get('/generate/:type', (req, res) => {
   }
 
   if (type === 'cnpj') {
-    const cnpj = gerarCnpj();
-    return res.json({ cnpj: formatarCnpj(cnpj) });
+    const cnpj = gerarCNPJ();
+    return res.json({ cnpj: formatarCNPJ(cnpj) });
   }
 
   res.status(400).json({ error: 'Tipo não suportado' });
