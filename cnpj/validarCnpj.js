@@ -1,4 +1,4 @@
-function validarCnpj(cnpj) {
+function validarCNPJ(cnpj) {
     cnpj = cnpj.replace(/[^\d]+/g, '');
 
     if (cnpj.length !== 14) return false;
@@ -34,4 +34,4 @@ function validarCnpj(cnpj) {
     return true;
 }
 
-module.exports = { validarCnpj };
+module.exports = { validarCNPJ };

@@ -5,9 +5,9 @@ const rateLimit = require('express-rate-limit');
 const { validarCPF } = require('./cpf/validarCpf');
 const { formatarCPF } = require('./cpf/formatarCpf');
 const { gerarCPF } = require('./cpf/gerarCpf');
-const { validarCnpj } = require('./cnpj/validarCnpj');
-const { formatarCnpj } = require('./cnpj/formatarCnpj');
-const { gerarCnpj } = require('./cnpj/gerarCnpj');
+const { validarCNPJ } = require('./cnpj/validarCnpj');
+const { formatarCNPJ } = require('./cnpj/formatarCnpj');
+const { gerarCNPJ } = require('./cnpj/gerarCnpj');
 
 const app = express();
 const PORT = 3000;
@@ -38,6 +38,10 @@ app.post('/validate', (req, res) => {
     if (validarCPF(normalized)) {
       result = { valid: true, type: 'cpf', formatted: formatarCPF(normalized) };
     }
+  } else if (normalized.length === 14) {
+    if (validarCNPJ(normalized)) {
+      result = { valid: true, type: 'cnpj', formatted: formatarCnpj(normalized) };
+    }
   }
 
   res.json(result);
@@ -60,6 +64,11 @@ app.get('/generate/:type', (req, res) => {
   if (type === 'cpf') {
     const cpf = gerarCPF();
     return res.json({ cpf: formatarCPF(cpf) });
+  }
+
+  if (type === 'cnpj') {
+    const cnpj = gerarCnpj();
+    return res.json({ cnpj: formatarCnpj(cnpj) });
   }
 
   res.status(400).json({ error: 'Tipo não suportado' });

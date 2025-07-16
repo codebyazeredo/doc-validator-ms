@@ -1,4 +1,4 @@
-function gerarCnpj() {
+function gerarCNPJ() {
     const random = () => Math.floor(Math.random() * 9);
     let n = Array.from({ length: 8 }, () => random());
 
@@ -17,4 +17,4 @@ function gerarCnpj() {
     return [...n, d1, d2].join('');
 }
 
-module.exports = { gerarCnpj };
+module.exports = { gerarCNPJ };
