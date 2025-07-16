@@ -7,6 +7,7 @@ const { formatarCPF } = require('./cpf/formatarCpf');
 const { gerarCPF } = require('./cpf/gerarCpf');
 
 const app = express();
+const PORT = 3000;
 
 app.use(express.json());
 app.use(helmet());
@@ -19,3 +20,48 @@ const limiter = rateLimit({
   });
   
 app.use(limiter);
+
+app.post('/validate', (req, res) => {
+  const doc = req.body.document;
+  
+  if (!doc || typeof doc !== 'string') {
+    return res.status(400).json({ error: 'Documento inválido.' });
+  }
+
+  const normalized = doc.replace(/[^\d]+/g, '');
+  let result = { valid: false, type: null, formatted: null };
+
+  if (normalized.length === 11) {
+    if (validarCPF(normalized)) {
+      result = { valid: true, type: 'cpf', formatted: formatarCPF(normalized) };
+    }
+  }
+
+  res.json(result);
+});
+
+app.post('/normalize', (req, res) => {
+  const doc = req.body.document;
+
+  if (!doc || typeof doc !== 'string') {
+    return res.status(400).json({ error: 'Documento inválido.' });
+  }
+
+  const normalized = doc.replace(/\D/g, '');
+  res.json({ normalized });
+});
+
+app.get('/generate/:type', (req, res) => {
+  const { type } = req.params;
+  
+  if (type === 'cpf') {
+    const cpf = gerarCPF();
+    return res.json({ cpf: formatarCPF(cpf) });
+  }
+
+  res.status(400).json({ error: 'Tipo não suportado' });
+});
+
+app.listen(PORT, () => {
+  console.log(`API rodando na porta ${PORT}`);
+});
