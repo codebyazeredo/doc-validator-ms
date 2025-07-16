@@ -8,6 +8,7 @@ const { gerarCPF } = require('./cpf/gerarCpf');
 const { validarCNPJ } = require('./cnpj/validarCnpj');
 const { formatarCNPJ } = require('./cnpj/formatarCnpj');
 const { gerarCNPJ } = require('./cnpj/gerarCnpj');
+const { consultarCNPJ } = require('./cnpj/consultarCnpj');
 
 const app = express();
 const PORT = 3000;
@@ -72,6 +73,23 @@ app.get('/generate/:type', (req, res) => {
   }
 
   res.status(400).json({ error: 'Tipo não suportado' });
+});
+
+app.post('/status/cnpj', async (req, res) => {
+  const { cnpj } = req.body;
+
+  if (!cnpj || typeof cnpj !== 'string') {
+    return res.status(400).json({ error: 'CNPJ não informado ou inválido.' });
+  }
+
+  const cnpjLimpo = cnpj.replace(/\D/g, '');
+  
+  if (cnpjLimpo.length !== 14) {
+    return res.status(400).json({ error: 'CNPJ inválido.' });
+  }
+
+  const resultado = await consultarCNPJ(cnpjLimpo);
+  res.json(resultado);
 });
 
 app.listen(PORT, () => {
