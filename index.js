@@ -5,6 +5,9 @@ const rateLimit = require('express-rate-limit');
 const { validarCPF } = require('./cpf/validarCpf');
 const { formatarCPF } = require('./cpf/formatarCpf');
 const { gerarCPF } = require('./cpf/gerarCpf');
+const { validarCnpj } = require('./cnpj/validarCnpj');
+const { formatarCnpj } = require('./cnpj/formatarCnpj');
+const { gerarCnpj } = require('./cnpj/gerarCnpj');
 
 const app = express();
 const PORT = 3000;
