@@ -17,16 +17,16 @@ app.use(helmet());
 app.use(cors());
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    message: { error: 'Muitas requisições. Tente novamente mais tarde.' },
-  });
-  
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: { error: 'Muitas requisições. Tente novamente mais tarde.' },
+});
+
 app.use(limiter);
 
 app.post('/validate', (req, res) => {
   const doc = req.body.document;
-  
+
   if (!doc || typeof doc !== 'string') {
     return res.status(400).json({ error: 'Documento inválido.' });
   }
@@ -60,7 +60,7 @@ app.post('/normalize', (req, res) => {
 
 app.get('/generate/:type', (req, res) => {
   const { type } = req.params;
-  
+
   if (type === 'cpf') {
     const cpf = gerarCPF();
     return res.json({ cpf: formatarCPF(cpf) });
